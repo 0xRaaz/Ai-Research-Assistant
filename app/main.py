@@ -1,11 +1,11 @@
 from fastapi import FastAPI, Request
 from dotenv import load_dotenv
-""" from fastapi.responses import JSONResponse
+from app.database.db import init_db
+from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 import traceback
 
-from app.database.db import init_db
-from app.api.upload   import router as upload_router
+"""from app.api.upload   import router as upload_router
 from app.api.chat     import router as chat_router
 from app.api.summary  import router as summary_router
 from app.api.citation import router as citation_router
