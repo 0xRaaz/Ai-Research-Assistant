@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ResearchAI — App</title>
+  <meta name="description" content="Your AI-powered research paper assistant." />
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="stylesheet" href="assets/css/app.css" />
+</head>
+
+<body>
+
+<div class="app-shell" id="appShell">
+
+  <!-- ═══════════════════════════════════════
+       SIDEBAR
+  ═══════════════════════════════════════ -->
+  <aside class="sidebar" id="sidebar">
+
+    <!-- Logo -->
+    <div class="sidebar-logo">
+      <a href="landing.html" class="logo-text">Research<span>AI</span></a>
+      <button class="sidebar-close" id="sidebarClose" aria-label="Close sidebar">✕</button>
+    </div>
+
+    <!-- Upload CTA -->
+    <button class="sidebar-upload-btn" id="sidebarUploadBtn" onclick="switchPanel('upload')">
+      <span>＋</span> New paper
+    </button>
+
+    <!-- Nav -->
+    <nav class="sidebar-nav" role="navigation">
+
+      <div class="sidebar-nav-label">Workspace</div>
+
+      <button class="sidebar-nav-item active" data-panel="chat" onclick="switchPanel('chat', this)">
+        <span class="nav-icon">💬</span>
+        <span>Chat</span>
+      </button>
+
+      <button class="sidebar-nav-item" data-panel="summary" onclick="switchPanel('summary', this)">
+        <span class="nav-icon">📝</span>
+        <span>Summary</span>
+      </button>
+
+      <button class="sidebar-nav-item" data-panel="citation" onclick="switchPanel('citation', this)">
+        <span class="nav-icon">🔗</span>
+        <span>Citations</span>
+      </button>
+
+      <button class="sidebar-nav-item" data-panel="search" onclick="switchPanel('search', this)">
+        <span class="nav-icon">🔍</span>
+        <span>Search</span>
+      </button>
+
+      <button class="sidebar-nav-item" data-panel="library" onclick="switchPanel('library', this)">
+        <span class="nav-icon">📚</span>
+        <span>Paper library</span>
+        <span class="nav-badge" id="paperCountBadge">0</span>
+      </button>
+
+      <button class="sidebar-nav-item" data-panel="history" onclick="switchPanel('history', this)">
+        <span class="nav-icon">🕘</span>
+        <span>History</span>
+      </button>
+
+      <div class="sidebar-nav-label" style="margin-top:8px;">Account</div>
+
+      <button class="sidebar-nav-item" data-panel="profile" onclick="switchPanel('profile', this)">
+        <span class="nav-icon">👤</span>
+        <span>Profile</span>
+      </button>
+
+      <button class="sidebar-nav-item" data-panel="settings" onclick="switchPanel('settings', this)">
+        <span class="nav-icon">⚙</span>
+        <span>Settings</span>
+      </button>
+
+    </nav>
+
+    <!-- Active paper card -->
+    <div class="sidebar-active-paper" id="sidebarActivePaper" style="display:none;">
+      <div class="active-paper-label">Active paper</div>
+      <div class="active-paper-name" id="activePaperName">—</div>
+      <div class="active-paper-meta" id="activePaperMeta">No paper selected</div>
+      <div class="active-paper-actions">
+        <button class="active-paper-btn" onclick="renamePaper()" title="Rename">✎ Rename</button>
+        <button class="active-paper-btn active-paper-btn-danger" onclick="deletePaper()" title="Delete">🗑 Delete</button>
+      </div>
+    </div>
+
+    <!-- Sidebar footer -->
+    <div class="sidebar-footer">
+      <div class="sidebar-user" id="sidebarUser">
+        <div class="sidebar-avatar" id="sidebarAvatar">?</div>
+        <div class="sidebar-user-info">
+          <div class="sidebar-user-name" id="sidebarUserName">Loading…</div>
+          <div class="sidebar-user-email" id="sidebarUserEmail"></div>
+        </div>
+      </div>
+      <button class="sidebar-logout" id="logoutBtn" onclick="logout()" title="Sign out">⏻</button>
+    </div>
+
+  </aside>
+
+  <!-- Mobile overlay -->
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+  <!-- ═══════════════════════════════════════
+       MAIN CONTENT
+  ═══════════════════════════════════════ -->
+  <main class="main-content" id="mainContent">
+
+    <!-- Topbar -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="topbar-menu" id="sidebarToggle" aria-label="Open sidebar" onclick="openSidebar()">☰</button>
+        <div class="topbar-breadcrumb">
+          <span class="topbar-app">ResearchAI</span>
+          <span class="topbar-sep">/</span>
+          <span class="topbar-panel" id="topbarPanel">Chat</span>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <div class="status-tag" id="topbarStatus">
+          <span class="dot"></span>
+          <span id="topbarStatusText">Ready</span>
+        </div>
+      </div>
+    </header>
+
+
+    <!-- ─────────────────────────────────────
+         PANEL: CHAT
+    ───────────────────────────────────── -->
+    <section class="panel active" id="panel-chat">
+
+      <!-- Empty state -->
+      <div class="chat-empty" id="chatEmpty">
+        <div class="chat-empty-inner">
+          <div class="chat-empty-icon">📄</div>
+          <h2 class="chat-empty-title">No paper selected</h2>
+          <p class="chat-empty-sub">Upload a PDF to start asking questions about it.</p>
+          <button class="btn-primary" onclick="switchPanel('upload')">Upload a paper →</button>
+        </div>
+      </div>
+
+      <!-- Chat interface (shown when paper active) -->
+      <div class="chat-interface" id="chatInterface" style="display:none;">
+
+        <!-- Chat header -->
+        <div class="chat-header">
+          <div class="chat-header-left">
+            <div class="chat-paper-icon">📄</div>
+            <div>
+              <div class="chat-paper-title" id="chatPaperTitle">Paper title</div>
+              <div class="chat-paper-meta" id="chatPaperMeta">0 chunks · ready</div>
+            </div>
+          </div>
+          <div class="chat-header-right">
+            <button class="chat-action-btn" onclick="exportChat()" title="Export">⬇ Export</button>
+            <button class="chat-action-btn chat-action-btn-danger" onclick="clearChat()">Clear</button>
+          </div>
+        </div>
+
+        <!-- Suggested questions -->
+        <div class="suggested-questions" id="suggestedQuestions">
+          <div class="suggested-label">Suggested questions</div>
+          <div class="suggested-chips">
+            <button class="suggested-chip" onclick="sendSuggestion(this)">What is this paper about?</button>
+            <button class="suggested-chip" onclick="sendSuggestion(this)">What dataset was used?</button>
+            <button class="suggested-chip" onclick="sendSuggestion(this)">What are the key findings?</button>
+          </div>
+        </div>
+
+        <!-- Messages -->
+        <div class="chat-messages" id="chatMessages" role="log" aria-live="polite"></div>
+
+        <!-- Typing indicator -->
+        <div class="typing-indicator" id="typingIndicator" style="display:none;" aria-label="AI is thinking">
+          <div class="typing-bubble">
+            <span class="typing-dot"></span>
+            <span class="typing-dot"></span>
+            <span class="typing-dot"></span>
+          </div>
+          <span class="typing-label">Thinking…</span>
+        </div>
+
+        <!-- Input area -->
+        <div class="chat-input-area">
+          <div class="chat-input-wrap">
+            <textarea
+              id="chatInput"
+              class="chat-input"
+              placeholder="Ask anything about this paper…"
+              rows="1"
+              aria-label="Chat input"
+              onkeydown="handleChatKey(event)"
+              oninput="autoResizeTextarea(this)"
+            ></textarea>
+            <button class="chat-send-btn" id="chatSendBtn" onclick="sendMessage()" aria-label="Send">→</button>
+          </div>
+          <div class="chat-input-meta">
+            <span>↵ Send · Shift+↵ New line</span>
+            <span id="chatTokenCount"></span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ─────────────────────────────────────
+         PANEL: SUMMARY
+    ───────────────────────────────────── -->
+    <section class="panel" id="panel-summary">
+      <div class="panel-page panel-page-narrow">
+
+        <div class="panel-page-header">
+          <div>
+            <div class="section-label">Summarise</div>
+            <h2 class="panel-title">Paper summary</h2>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <div class="settings-row">
+            <div class="settings-row-info">
+              <div class="settings-row-label">Summary type</div>
+              <div class="settings-row-sub">Choose how much detail you need</div>
+            </div>
+            <select class="settings-select" id="summaryType">
+              <option value="short">Short</option>
+              <option value="detailed">Detailed</option>
+              <option value="sectionwise">Section-wise</option>
+            </select>
+          </div>
+          <br>
+          <button class="btn-primary" id="summaryBtn" onclick="getSummary()">
+            <span class="btn-text">Generate summary →</span>
+            <span class="spinner" style="display:none;"></span>
+          </button>
+        </div>
+
+        <div id="summaryResult" style="margin-top:24px;display:none;">
+          <div class="divider" style="margin-bottom:20px;"></div>
+          <div class="settings-section-title">Result</div>
+          <div id="summaryOutput" style="font-size:14px;line-height:1.8;color:var(--text-main);white-space:pre-wrap;margin-top:12px;"></div>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ─────────────────────────────────────
+         PANEL: CITATION
+    ───────────────────────────────────── -->
+    <section class="panel" id="panel-citation">
+      <div class="panel-page panel-page-narrow">
+
+        <div class="panel-page-header">
+          <div>
+            <div class="section-label">Citations</div>
+            <h2 class="panel-title">Extract citations</h2>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <div class="settings-row">
+            <div class="settings-row-info">
+              <div class="settings-row-label">Extract type</div>
+              <div class="settings-row-sub">Get citations list or paper metadata</div>
+            </div>
+            <select class="settings-select" id="citationType">
+              <option value="citations">Citations</option>
+              <option value="metadata">Metadata</option>
+            </select>
+          </div>
+          <br>
+          <button class="btn-primary" id="citationBtn" onclick="getCitation()">
+            <span class="btn-text">Extract →</span>
+            <span class="spinner" style="display:none;"></span>
+          </button>
+        </div>
+
+        <div id="citationResult" style="margin-top:24px;display:none;">
+          <div class="divider" style="margin-bottom:20px;"></div>
+          <div class="settings-section-title">Result</div>
+          <div id="citationOutput" style="font-size:14px;line-height:1.8;color:var(--text-main);margin-top:12px;"></div>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ─────────────────────────────────────
+         PANEL: SEARCH
+    ───────────────────────────────────── -->
+    <section class="panel" id="panel-search">
+      <div class="panel-page panel-page-narrow">
+
+        <div class="panel-page-header">
+          <div>
+            <div class="section-label">Search</div>
+            <h2 class="panel-title">Semantic search</h2>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <div class="form-group">
+            <label for="searchQuery">Search query</label>
+            <input
+              type="text"
+              id="searchQuery"
+              class="form-input"
+              placeholder="e.g. transformer attention mechanism"
+              onkeydown="if(event.key==='Enter') semanticSearch()"
+            />
+          </div>
+          <div class="settings-row" style="margin-top:12px;">
+            <div class="settings-row-info">
+              <div class="settings-row-label">Results to fetch (top K)</div>
+              <div class="settings-row-sub">How many passages to retrieve</div>
+            </div>
+            <select class="settings-select" id="searchTopK">
+              <option value="3">3 — Fast</option>
+              <option value="5" selected>5 — Default</option>
+              <option value="10">10 — Thorough</option>
+            </select>
+          </div>
+          <br>
+          <button class="btn-primary" id="searchBtn" onclick="semanticSearch()">
+            <span class="btn-text">Search →</span>
+            <span class="spinner" style="display:none;"></span>
+          </button>
+        </div>
+
+        <div id="searchResult" style="margin-top:24px;display:none;">
+          <div class="divider" style="margin-bottom:20px;"></div>
+          <div class="settings-section-title">Results</div>
+          <div id="searchOutput" style="font-size:14px;line-height:1.8;color:var(--text-main);margin-top:12px;"></div>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ─────────────────────────────────────
+         PANEL: UPLOAD
+    ───────────────────────────────────── -->
+    <section class="panel" id="panel-upload">
+      <div class="upload-page">
+        <div class="upload-page-inner">
+
+          <div class="upload-page-header">
+            <div class="section-label">Upload</div>
+            <h2 class="upload-page-title">Add a research paper</h2>
+            <p class="upload-page-sub">Supports PDF files up to 50MB.</p>
+          </div>
+
+          <!-- Drop zone -->
+          <div
+            class="drop-zone"
+            id="dropZone"
+            role="button"
+            tabindex="0"
+            aria-label="Upload PDF — click or drag and drop"
+            ondragover="handleDragOver(event)"
+            ondragleave="handleDragLeave(event)"
+            ondrop="handleDrop(event)"
+            onclick="document.getElementById('fileInput').click()"
+            onkeydown="if(event.key==='Enter')document.getElementById('fileInput').click()"
+          >
+            <input type="file" id="fileInput" accept=".pdf" style="display:none;" onchange="handleFileSelect(event)" />
+            <div class="drop-zone-icon">📄</div>
+            <div class="drop-zone-title">Drop your PDF here</div>
+            <div class="drop-zone-sub">or click to browse files</div>
+            <div class="drop-zone-hint badge">PDF · Max 50MB</div>
+          </div>
+
+          <!-- Upload progress -->
+          <div class="upload-progress-wrap" id="uploadProgressWrap" style="display:none;">
+            <div class="upload-progress-header">
+              <div class="upload-progress-filename" id="uploadFilename">file.pdf</div>
+              <div class="upload-progress-pct" id="uploadPct">0%</div>
+            </div>
+            <div class="upload-progress-track">
+              <div class="upload-progress-bar" id="uploadProgressBar"></div>
+            </div>
+            <div class="upload-progress-status" id="uploadProgressStatus">Uploading…</div>
+          </div>
+
+          <!-- Paper name -->
+          <div class="form-group" id="paperNameGroup" style="display:none;">
+            <label for="paperNameInput">Give this paper a name <span class="text-dim">(optional)</span></label>
+            <input type="text" id="paperNameInput" class="form-input" placeholder="e.g. Attention Is All You Need" maxlength="80" />
+          </div>
+
+          <!-- Upload button -->
+          <button class="btn-primary" id="uploadBtn" style="width:100%;display:none;" onclick="uploadPaper()">
+            <span class="btn-text">Process paper →</span>
+            <span class="spinner" style="display:none;"></span>
+          </button>
+
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ─────────────────────────────────────
+         PANEL: LIBRARY
+    ───────────────────────────────────── -->
+    <section class="panel" id="panel-library">
+      <div class="panel-page">
+
+        <div class="panel-page-header">
+          <div>
+            <div class="section-label">Library</div>
+            <h2 class="panel-title">Your papers</h2>
+          </div>
+          <button class="btn-primary btn-sm" onclick="switchPanel('upload')">＋ Upload paper</button>
+        </div>
+
+        <div class="library-search-wrap">
+          <span class="library-search-icon">🔍</span>
+          <input
+            type="search"
+            id="librarySearch"
+            class="form-input library-search"
+            placeholder="Search papers…"
+            oninput="filterLibrary(this.value)"
+          />
+        </div>
+
+        <div class="paper-grid" id="paperGrid"></div>
+
+        <div class="empty-state" id="libraryEmpty" style="display:none;">
+          <div class="empty-icon">📚</div>
+          <p>No papers yet.<br>Upload your first paper to get started.</p>
+          <br>
+          <button class="btn-ghost btn-sm" onclick="switchPanel('upload')">Upload now →</button>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ─────────────────────────────────────
+         PANEL: HISTORY
+    ───────────────────────────────────── -->
+    <section class="panel" id="panel-history">
+      <div class="panel-page">
+
+        <div class="panel-page-header">
+          <div>
+            <div class="section-label">History</div>
+            <h2 class="panel-title">Chat history</h2>
+          </div>
+          <button class="btn-ghost btn-sm" onclick="clearAllHistory()">Clear all</button>
+        </div>
+
+        <div class="history-list" id="historyList"></div>
+
+        <div class="empty-state" id="historyEmpty" style="display:none;">
+          <div class="empty-icon">🕘</div>
+          <p>No chat history yet.<br>Your conversations will appear here.</p>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ─────────────────────────────────────
+         PANEL: PROFILE
+    ───────────────────────────────────── -->
+    <section class="panel" id="panel-profile">
+      <div class="panel-page panel-page-narrow">
+
+        <div class="panel-page-header">
+          <div>
+            <div class="section-label">Account</div>
+            <h2 class="panel-title">Your profile</h2>
+          </div>
+        </div>
+
+        <!-- Avatar -->
+        <div class="profile-hero">
+          <div class="profile-avatar" id="profileAvatar">?</div>
+          <div>
+            <div class="profile-name" id="profileName">—</div>
+            <div class="profile-email" id="profileEmail">—</div>
+            <div class="profile-joined" id="profileJoined">—</div>
+          </div>
+        </div>
+
+        <div class="divider" style="margin:24px 0;"></div>
+
+        <!-- Display name -->
+        <div class="profile-section">
+          <div class="profile-section-title">Display name</div>
+          <div class="form-group">
+            <input type="text" id="profileDisplayName" class="form-input" placeholder="Your display name" />
+          </div>
+          <button class="btn-primary btn-sm" onclick="saveProfile()">Save changes</button>
+        </div>
+
+        <div class="divider" style="margin:24px 0;"></div>
+
+        <!-- Change password -->
+        <div class="profile-section">
+          <div class="profile-section-title">Change password</div>
+          <div class="form-group">
+            <label>Current password</label>
+            <input type="password" id="currentPassword" class="form-input" placeholder="Current password" />
+          </div>
+          <div class="form-group">
+            <label>New password</label>
+            <input type="password" id="newPassword" class="form-input" placeholder="New password (min 8 chars)" />
+          </div>
+          <div class="form-group">
+            <label>Confirm new password</label>
+            <input type="password" id="confirmNewPassword" class="form-input" placeholder="Repeat new password" />
+          </div>
+          <button class="btn-ghost btn-sm" onclick="changePassword()">Update password</button>
+        </div>
+
+        <div class="divider" style="margin:24px 0;"></div>
+
+        <!-- Stats -->
+        <div class="profile-section">
+          <div class="profile-section-title">Your stats</div>
+          <div class="profile-stats-grid">
+            <div class="profile-stat">
+              <div class="profile-stat-num" id="statPapers">0</div>
+              <div class="profile-stat-label">Papers uploaded</div>
+            </div>
+            <div class="profile-stat">
+              <div class="profile-stat-num" id="statQuestions">0</div>
+              <div class="profile-stat-label">Questions asked</div>
+            </div>
+            <div class="profile-stat">
+              <div class="profile-stat-num" id="statDays">0</div>
+              <div class="profile-stat-label">Days active</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="divider" style="margin:24px 0;"></div>
+
+        <!-- Danger zone -->
+        <div class="profile-section">
+          <div class="profile-section-title" style="color:var(--danger);">Danger zone</div>
+          <p style="font-size:13px;color:var(--text-muted);margin-bottom:14px;line-height:1.6;">
+            Permanently delete your account and all uploaded papers. This cannot be undone.
+          </p>
+          <button class="btn-danger" onclick="confirmDeleteAccount()">Delete account</button>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ─────────────────────────────────────
+         PANEL: SETTINGS
+    ───────────────────────────────────── -->
+    <section class="panel" id="panel-settings">
+      <div class="panel-page panel-page-narrow">
+
+        <div class="panel-page-header">
+          <div>
+            <div class="section-label">Preferences</div>
+            <h2 class="panel-title">Settings</h2>
+          </div>
+        </div>
+
+        <!-- AI settings -->
+        <div class="settings-section">
+          <div class="settings-section-title">AI behaviour</div>
+
+          <div class="settings-row">
+            <div class="settings-row-info">
+              <div class="settings-row-label">Response style</div>
+              <div class="settings-row-sub">How detailed should AI answers be?</div>
+            </div>
+            <select class="settings-select" id="settingResponseStyle" onchange="saveSetting('responseStyle',this.value)">
+              <option value="concise">Concise</option>
+              <option value="balanced" selected>Balanced</option>
+              <option value="detailed">Detailed</option>
+            </select>
+          </div>
+
+          <div class="settings-row">
+            <div class="settings-row-info">
+              <div class="settings-row-label">Always show citations</div>
+              <div class="settings-row-sub">Include section references in every answer</div>
+            </div>
+            <label class="settings-toggle">
+              <input type="checkbox" id="settingCitations" checked onchange="saveSetting('citations',this.checked)" />
+              <span class="settings-toggle-track"></span>
+            </label>
+          </div>
+
+          <div class="settings-row">
+            <div class="settings-row-info">
+              <div class="settings-row-label">Source chunks retrieved</div>
+              <div class="settings-row-sub">How many passages to use per question</div>
+            </div>
+            <select class="settings-select" id="settingTopK" onchange="saveSetting('topK',this.value)">
+              <option value="3">3 — Fast</option>
+              <option value="5" selected>5 — Default</option>
+              <option value="8">8 — Thorough</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="divider" style="margin:20px 0;"></div>
+
+        <!-- App settings -->
+        <div class="settings-section">
+          <div class="settings-section-title">App</div>
+
+          <div class="settings-row">
+            <div class="settings-row-info">
+              <div class="settings-row-label">Save chat history</div>
+              <div class="settings-row-sub">Persist conversations per paper locally</div>
+            </div>
+            <label class="settings-toggle">
+              <input type="checkbox" id="settingHistory" checked onchange="saveSetting('history',this.checked)" />
+              <span class="settings-toggle-track"></span>
+            </label>
+          </div>
+
+          <div class="settings-row">
+            <div class="settings-row-info">
+              <div class="settings-row-label">Show suggested questions</div>
+              <div class="settings-row-sub">Display starter questions after upload</div>
+            </div>
+            <label class="settings-toggle">
+              <input type="checkbox" id="settingSuggestions" checked onchange="saveSetting('suggestions',this.checked)" />
+              <span class="settings-toggle-track"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="divider" style="margin:20px 0;"></div>
+
+        <!-- Data -->
+        <div class="settings-section">
+          <div class="settings-section-title">Data</div>
+
+          <div class="settings-row">
+            <div class="settings-row-info">
+              <div class="settings-row-label">Clear local chat history</div>
+              <div class="settings-row-sub">Remove all saved conversations from this device</div>
+            </div>
+            <button class="btn-ghost btn-sm" onclick="clearAllHistory()">Clear</button>
+          </div>
+
+          <div class="settings-row">
+            <div class="settings-row-info">
+              <div class="settings-row-label">App version</div>
+              <div class="settings-row-sub">ResearchAI v1.0.0 · beta</div>
+            </div>
+            <span class="badge">v1.0.0</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+</div><!-- /app-shell -->
+
+
+<!-- ═══════════════════════════════════════
+     MODALS
+═══════════════════════════════════════ -->
+
+<!-- Confirm modal -->
+<div class="modal-overlay" id="confirmModal" style="display:none;" role="dialog" aria-modal="true">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="confirmTitle">Are you sure?</div>
+      <button class="modal-close" onclick="closeModal('confirmModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <p class="modal-text" id="confirmText"></p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-ghost btn-sm" onclick="closeModal('confirmModal')">Cancel</button>
+      <button class="btn-danger btn-sm" id="confirmActionBtn">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<!-- Rename modal -->
+<div class="modal-overlay" id="renameModal" style="display:none;" role="dialog" aria-modal="true">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Rename paper</div>
+      <button class="modal-close" onclick="closeModal('renameModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label for="renameInput">New name</label>
+        <input
+          type="text"
+          id="renameInput"
+          class="form-input"
+          placeholder="e.g. Attention Is All You Need"
+          maxlength="80"
+          onkeydown="if(event.key==='Enter')confirmRename()"
+        />
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-ghost btn-sm" onclick="closeModal('renameModal')">Cancel</button>
+      <button class="btn-primary btn-sm" onclick="confirmRename()">Save name</button>
+    </div>
+  </div>
+</div>
+
+<!-- Export modal -->
+<div class="modal-overlay" id="exportModal" style="display:none;" role="dialog" aria-modal="true">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Export chat</div>
+      <button class="modal-close" onclick="closeModal('exportModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <p class="modal-text">Download your conversation and AI answers.</p>
+      <div class="export-options">
+        <button class="export-option-btn" onclick="doExport('txt')">
+          <span class="export-icon">📄</span>
+          <div>
+            <div class="export-option-title">Plain text</div>
+            <div class="export-option-sub">.txt · Readable anywhere</div>
+          </div>
+        </button>
+        <button class="export-option-btn" onclick="doExport('pdf')">
+          <span class="export-icon">📕</span>
+          <div>
+            <div class="export-option-title">PDF document</div>
+            <div class="export-option-sub">.pdf · Formatted for sharing</div>
+          </div>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════
+     TOAST STACK
+═══════════════════════════════════════ -->
+<div class="toast-stack" id="toastStack" aria-live="polite"></div>
+
+
+<!-- ═══════════════════════════════════════
+     SCRIPTS
+═══════════════════════════════════════ -->
+<script src="assets/js/app.js"></script>
+<script>
+  window.handleSessionExpired = window.handleSessionExpired || function() {
+    localStorage.removeItem('rai_token');
+    sessionStorage.removeItem('rai_token');
+    localStorage.removeItem('rai_user');
+    window.location.replace('auth.html');
+  };
+</script>
+
+</body>
+</html>

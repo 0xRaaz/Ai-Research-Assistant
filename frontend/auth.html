@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ResearchAI — Sign in</title>
+  <meta name="description" content="Sign in or create your ResearchAI account." />
+
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="stylesheet" href="assets/css/auth.css" />
+</head>
+
+<body>
+
+  <!-- Back to landing -->
+  <a href="landing.html" class="auth-back">← Back</a>
+
+  <div class="auth-page">
+
+    <!-- ═══════════════════════════════════════
+         LEFT PANEL — Brand visual
+    ═══════════════════════════════════════ -->
+    <div class="auth-left">
+      <div class="auth-left-glow"></div>
+
+      <!-- Top logo -->
+      <div class="auth-left-top">
+        <div class="auth-logo">Research<span>AI</span></div>
+      </div>
+
+      <!-- Center mockup -->
+      <div class="auth-left-center">
+        <div class="auth-mockup">
+
+          <!-- Paper being processed -->
+          <div class="auth-paper-card">
+            <div class="auth-paper-card-header">
+              <div class="auth-paper-icon">📄</div>
+              <div class="auth-paper-title">
+                <strong>attention_is_all_you_need.pdf</strong>
+                Processing · 847 chunks indexed
+              </div>
+            </div>
+            <div class="auth-progress">
+              <div class="auth-progress-bar"></div>
+            </div>
+            <div class="auth-paper-meta">Embedding complete · ChromaDB ready</div>
+          </div>
+
+          <!-- Chat snippet -->
+          <div class="auth-chat">
+            <div class="auth-chat-bubble user">
+              What is the key contribution of this paper?
+            </div>
+            <div class="auth-chat-bubble ai">
+              The Transformer replaces recurrence entirely with self-attention, enabling
+              parallelisation and achieving state-of-the-art BLEU scores — see §1 and §6.
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Bottom quote -->
+      <div class="auth-left-bottom">
+        <div class="auth-quote">
+          <div class="auth-quote-text">
+            "I used to spend 2 hours reading a paper before understanding the core idea.
+            Now I get it in 5 minutes — with the exact section cited."
+          </div>
+          <div class="auth-quote-author">
+            <div class="auth-quote-avatar">🎓</div>
+            <div class="auth-quote-name">PhD Researcher · NLP Lab</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+
+    <!-- ═══════════════════════════════════════
+         RIGHT PANEL — Auth form
+    ═══════════════════════════════════════ -->
+    <div class="auth-right">
+      <div class="auth-box">
+
+        <!-- Header -->
+        <div class="auth-box-header">
+          <div class="auth-box-label">Welcome</div>
+          <h1 class="auth-box-title" id="authTitle">Sign in to ResearchAI</h1>
+          <p class="auth-box-sub" id="authSub">
+            Upload papers, ask questions, get cited answers.
+          </p>
+        </div>
+
+        <!-- Tab switcher -->
+        <div class="auth-tabs" role="tablist">
+          <button
+            class="auth-tab active"
+            id="tab-login"
+            role="tab"
+            aria-selected="true"
+            aria-controls="panel-login"
+            onclick="switchTab('login')"
+          >Sign in</button>
+          <button
+            class="auth-tab"
+            id="tab-register"
+            role="tab"
+            aria-selected="false"
+            aria-controls="panel-register"
+            onclick="switchTab('register')"
+          >Create account</button>
+        </div>
+
+
+        <!-- ───────────────────────────────
+             LOGIN PANEL
+        ─────────────────────────────────── -->
+        <div class="auth-panel active" id="panel-login" role="tabpanel">
+
+          <form class="auth-form" id="loginForm" novalidate>
+
+            <!-- Email -->
+            <div class="input-wrap">
+              <label for="loginEmail">Email address</label>
+              <span class="input-icon">✉</span>
+              <input
+                type="email"
+                id="loginEmail"
+                name="email"
+                class="form-input"
+                placeholder="you@university.edu"
+                autocomplete="email"
+                required
+              />
+              <div class="field-error" id="loginEmailError">Enter a valid email address</div>
+            </div>
+
+            <!-- Password -->
+            <div class="input-wrap">
+              <label for="loginPassword">Password</label>
+              <span class="input-icon">🔒</span>
+              <input
+                type="password"
+                id="loginPassword"
+                name="password"
+                class="form-input"
+                placeholder="Your password"
+                autocomplete="current-password"
+                required
+              />
+              <button
+                type="button"
+                class="password-toggle"
+                onclick="togglePassword('loginPassword', this)"
+                aria-label="Show password"
+              >👁</button>
+              <div class="field-error" id="loginPasswordError">Password is required</div>
+            </div>
+
+            <!-- Remember me + forgot -->
+            <div class="auth-meta-row">
+              <label class="remember-me">
+                <input type="checkbox" id="rememberMe" name="rememberMe" />
+                <span>Remember me</span>
+              </label>
+              <a href="#" class="forgot-link" onclick="showForgotPassword(event)">Forgot password?</a>
+            </div>
+
+            <!-- Submit -->
+            <button type="submit" class="btn-primary auth-submit" id="loginBtn">
+              <span class="btn-text">Sign in →</span>
+              <span class="spinner"></span>
+            </button>
+
+          </form>
+
+          <!-- Switch to register -->
+          <div class="auth-switch">
+            Don't have an account?
+            <button onclick="switchTab('register')">Create one free →</button>
+          </div>
+
+        </div>
+
+
+        <!-- ───────────────────────────────
+             REGISTER PANEL
+        ─────────────────────────────────── -->
+        <div class="auth-panel" id="panel-register" role="tabpanel">
+
+          <form class="auth-form" id="registerForm" novalidate>
+
+            <!-- Name row -->
+            <div class="auth-form-row">
+              <div class="input-wrap">
+                <label for="regFirstName">First name</label>
+                <input
+                  type="text"
+                  id="regFirstName"
+                  name="firstName"
+                  class="form-input"
+                  placeholder="Ada"
+                  autocomplete="given-name"
+                  required
+                />
+                <div class="field-error" id="regFirstNameError">Required</div>
+              </div>
+              <div class="input-wrap">
+                <label for="regLastName">Last name</label>
+                <input
+                  type="text"
+                  id="regLastName"
+                  name="lastName"
+                  class="form-input"
+                  placeholder="Lovelace"
+                  autocomplete="family-name"
+                  required
+                />
+              </div>
+            </div>
+
+            <!-- Email -->
+            <div class="input-wrap">
+              <label for="regEmail">Email address</label>
+              <span class="input-icon">✉</span>
+              <input
+                type="email"
+                id="regEmail"
+                name="email"
+                class="form-input"
+                placeholder="you@university.edu"
+                autocomplete="email"
+                required
+              />
+              <div class="field-error" id="regEmailError">Enter a valid email address</div>
+            </div>
+
+            <!-- Password -->
+            <div class="input-wrap">
+              <label for="regPassword">Password</label>
+              <span class="input-icon">🔒</span>
+              <input
+                type="password"
+                id="regPassword"
+                name="password"
+                class="form-input"
+                placeholder="Choose a strong password"
+                autocomplete="new-password"
+                required
+                oninput="checkPasswordStrength(this.value)"
+              />
+              <button
+                type="button"
+                class="password-toggle"
+                onclick="togglePassword('regPassword', this)"
+                aria-label="Show password"
+              >👁</button>
+              <div class="field-error" id="regPasswordError">Minimum 8 characters</div>
+
+              <!-- Strength meter -->
+              <div class="password-strength" id="passwordStrength">
+                <div class="strength-bar-track">
+                  <div class="strength-bar-fill" id="strengthBar"></div>
+                </div>
+                <span class="strength-label" id="strengthLabel"></span>
+              </div>
+            </div>
+
+            <!-- Confirm password -->
+            <div class="input-wrap">
+              <label for="regConfirmPassword">Confirm password</label>
+              <span class="input-icon">🔒</span>
+              <input
+                type="password"
+                id="regConfirmPassword"
+                name="confirmPassword"
+                class="form-input"
+                placeholder="Repeat your password"
+                autocomplete="new-password"
+                required
+              />
+              <div class="field-error" id="regConfirmError">Passwords do not match</div>
+            </div>
+
+            <!-- Submit -->
+            <button type="submit" class="btn-primary auth-submit" id="registerBtn">
+              <span class="btn-text">Create account →</span>
+              <span class="spinner"></span>
+            </button>
+
+            <!-- Terms -->
+            <div class="auth-footer-text" style="margin-top: 12px;">
+              By creating an account you agree to our
+              <a href="#">Terms of Service</a> and
+              <a href="#">Privacy Policy</a>.
+            </div>
+
+          </form>
+
+          <!-- Switch to login -->
+          <div class="auth-switch">
+            Already have an account?
+            <button onclick="switchTab('login')">Sign in →</button>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+  </div><!-- /auth-page -->
+
+
+  <!-- Toast container (from style.css) -->
+  <div class="toast" id="toast" role="alert" aria-live="polite"></div>
+
+
+  <!-- Auth JS -->
+  <script src="assets/js/auth.js"></script>
+
+</body>
+</html>

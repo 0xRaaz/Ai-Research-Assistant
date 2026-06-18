@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ResearchAI — Understand Any Paper in Minutes</title>
+  <meta name="description" content="Upload a research paper, ask questions, get precise answers with citations. Built for researchers, students, and curious minds." />
+
+  <!-- Shared base styles -->
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <!-- Landing-specific styles -->
+  <link rel="stylesheet" href="assets/css/landing.css" />
+
+  <!-- AOS (Animate on Scroll) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
+
+  <!-- Lucide Icons -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/umd/lucide.min.js"></script>
+</head>
+
+<body class="bg-noise">
+
+  <!-- ═══════════════════════════════════════
+       FLOATING SHELL WRAPPER
+  ═══════════════════════════════════════ -->
+  <div class="shell">
+
+    <!-- ─────────────────────────────────────
+         NAVIGATION
+    ───────────────────────────────────── -->
+    <nav class="nav">
+      <!-- Logo -->
+      <a href="#" class="nav-logo">Research<span>AI</span></a>
+
+      <!-- Center pill nav -->
+      <div class="nav-links" id="navLinks">
+        <a href="#features"    class="nav-link">Features</a>
+        <a href="#how"         class="nav-link">How it works</a>
+        <a href="#tech"        class="nav-link">Tech stack</a>
+        <a href="#about"       class="nav-link">About</a>
+      </div>
+
+      <!-- Right side -->
+      <div class="nav-right">
+        <a href="auth.html" class="nav-link">Sign in</a>
+        <a href="auth.html?mode=register" class="nav-cta">Get started →</a>
+        <!-- Mobile hamburger -->
+        <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">☰</button>
+      </div>
+    </nav>
+
+
+    <!-- ─────────────────────────────────────
+         HERO SECTION
+    ───────────────────────────────────── -->
+    <section class="hero">
+      <!-- Decorative glows -->
+      <div class="glow-sphere hero-glow-1"></div>
+      <div class="glow-sphere glow-sphere-emerald hero-glow-2"></div>
+
+      <!-- Left content -->
+      <div class="hero-left">
+
+        <div class="hero-label">
+          <span class="dot"></span>
+          Now in beta — free to try
+        </div>
+
+        <h1 class="hero-heading">
+          Read less.<br>
+          <span class="gradient-text">Know more.</span>
+        </h1>
+
+        <p class="hero-sub">
+          Upload any research paper and have a conversation with it.
+          Get precise answers, cited passages, and structured summaries —
+          in seconds, not hours.
+        </p>
+
+        <div class="hero-cta-row">
+          <a href="auth.html?mode=register" class="btn-primary">
+            <span>Upload your first paper</span>
+            <span>→</span>
+          </a>
+          <a href="#how" class="btn-ghost">See how it works</a>
+        </div>
+
+        <!-- Stat chips -->
+        <div class="hero-stats">
+          <span class="hero-stat-chip">⚡ &lt; 3s response time</span>
+          <span class="hero-stat-chip">📄 PDF · arXiv · DOI</span>
+          <span class="hero-stat-chip">🔒 Private by default</span>
+          <span class="hero-stat-chip">🧠 Gemini-2.5 powered</span>
+        </div>
+
+      </div>
+
+      <!-- Right — floating mockup -->
+      <div class="hero-right">
+
+        <!-- Floating mini cards -->
+        <div class="hero-float-card hero-float-card-1">
+          📄 transformer_attention.pdf
+        </div>
+
+        <div class="hero-mockup">
+          <div class="mockup-header">
+            <span class="mockup-file">attention_is_all_you_need.pdf</span>
+            <span class="mockup-ai-tag">AI</span>
+          </div>
+
+          <div class="mockup-chat">
+            <div class="mockup-bubble user">
+              What problem does self-attention solve?
+            </div>
+            <div class="mockup-bubble ai">
+              Self-attention allows the model to relate tokens at any position to
+              any other, removing the sequential bottleneck of RNNs. The authors
+              show O(1) path length between any two positions — see §3.2.
+            </div>
+            <div class="mockup-bubble user">
+              What dataset did they train on?
+            </div>
+            <div class="mockup-bubble ai">
+              WMT 2014 English-German (4.5M sentence pairs) and English-French
+              (36M pairs), achieving 28.4 and 41.0 BLEU respectively — §6.
+            </div>
+          </div>
+
+          <div class="mockup-tags">
+            <span class="mockup-tag">§ cited</span>
+            <span class="mockup-tag">🔍 RAG</span>
+            <span class="mockup-tag">✓ verified</span>
+          </div>
+        </div>
+
+        <div class="hero-float-card hero-float-card-2">
+          ✓ Citation verified · §3.2
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ─────────────────────────────────────
+         FEATURES — BENTO GRID
+    ───────────────────────────────────── -->
+    <section class="features" id="features">
+
+      <div class="features-header">
+        <div class="section-label">Features</div>
+        <h2 class="section-title">Everything you need to<br>understand a paper deeply</h2>
+      </div>
+
+      <div class="bento-grid">
+
+        <!-- 1. Large card — PDF Upload + Processing -->
+        <div class="bento-card bento-card-large" data-aos="fade-up">
+          <div class="card-label">01 · Upload</div>
+          <div class="card-title">Drop any PDF. We handle the rest.</div>
+          <div class="card-body">
+            Upload a PDF or paste an arXiv link. ResearchAI chunks, embeds,
+            and indexes the full text in under 10 seconds — ready for conversation.
+          </div>
+          <div class="card-visual">
+            <div class="eq-bars">
+              <div class="eq-bar"></div>
+              <div class="eq-bar"></div>
+              <div class="eq-bar"></div>
+              <div class="eq-bar"></div>
+              <div class="eq-bar"></div>
+              <div class="eq-bar"></div>
+              <div class="eq-bar"></div>
+              <div class="eq-bar"></div>
+            </div>
+            <div style="margin-top:12px;">
+              <div class="search-line" style="font-size:10px; opacity:1;">
+                <span style="color:var(--lime)">✓</span> Chunking complete — 847 passages indexed
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Tall card — Semantic Search -->
+        <div class="bento-card bento-card-tall" data-aos="fade-up" data-aos-delay="100">
+          <div class="card-label">02 · Search</div>
+          <div class="card-title">Semantic retrieval, not keyword matching</div>
+          <div class="card-body">
+            Questions are embedded and matched against the paper's vector index.
+            The most relevant passages surface — not just the ones with matching words.
+          </div>
+          <div class="card-visual">
+            <div class="search-lines">
+              <div class="search-line">§3.2 — Multi-head attention mechanism</div>
+              <div class="search-line">§5.1 — Training on WMT 2014 dataset</div>
+              <div class="search-line">§6 — BLEU score comparison table</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Accent card -->
+        <div class="bento-card bento-card-accent" data-aos="fade-up" data-aos-delay="150">
+          <div class="card-label">accuracy</div>
+          <div class="accent-number">98%</div>
+          <div class="card-title">Citation accuracy on benchmark papers</div>
+          <ul class="accent-list">
+            <li>→ Grounded answers only</li>
+            <li>→ No hallucinated references</li>
+            <li>→ Source passage always shown</li>
+          </ul>
+        </div>
+
+        <!-- 4. Wide card — Citations -->
+        <div class="bento-card bento-card-wide" data-aos="fade-up" data-aos-delay="200">
+          <div class="card-label">03 · Citations</div>
+          <div class="card-title">Every answer is grounded in the paper</div>
+          <div class="card-body">No guessing. Every claim is traced back to a specific section.</div>
+          <div class="card-visual">
+            <div class="mini-citation">
+              <div class="mini-citation-num">§3</div>
+              <div class="mini-citation-body">
+                <div class="mini-citation-title">Model Architecture</div>
+                <div class="mini-citation-meta">Page 3 · Attention Is All You Need</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5. Regular card — Summaries -->
+        <div class="bento-card" data-aos="fade-up" data-aos-delay="100">
+          <div class="card-label">04 · Summaries</div>
+          <div class="card-title">Structured breakdowns on demand</div>
+          <div class="card-body">
+            Ask for a TL;DR, methodology breakdown, or key findings — structured to your needs.
+          </div>
+          <div class="card-visual">
+            <div class="mini-tabs">
+              <div class="mini-tab active">TL;DR</div>
+              <div class="mini-tab">Methods</div>
+              <div class="mini-tab">Findings</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 6. Regular card — Auth -->
+        <div class="bento-card" data-aos="fade-up" data-aos-delay="150">
+          <div class="card-label">05 · Private</div>
+          <div class="card-title">Your papers stay yours</div>
+          <div class="card-body">
+            JWT-secured accounts. Your uploaded papers are never shared or used for training.
+          </div>
+          <div class="card-visual">
+            <div class="mini-auth">
+              <div class="mini-auth-lock">🔒</div>
+              <div class="mini-field">●●●●●●●●●●●● encrypted</div>
+              <div class="mini-field">JWT · bcrypt · HTTPS only</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ─────────────────────────────────────
+         HOW IT WORKS
+    ───────────────────────────────────── -->
+    <section class="how-it-works" id="how">
+
+      <div class="section-label">How it works</div>
+      <h2 class="section-title">From PDF to answers<br>in under 30 seconds</h2>
+
+      <div class="steps-grid">
+
+        <!-- Steps list -->
+        <div class="steps-list">
+
+          <div class="step-item" data-aos="fade-right">
+            <div class="step-num">01</div>
+            <div class="step-content">
+              <div class="step-title">Upload your paper</div>
+              <div class="step-desc">
+                Drop a PDF or paste an arXiv URL. ResearchAI extracts and
+                cleans the full text, preserving section structure and references.
+              </div>
+            </div>
+          </div>
+
+          <div class="step-item" data-aos="fade-right" data-aos-delay="100">
+            <div class="step-num">02</div>
+            <div class="step-content">
+              <div class="step-title">Automatic chunking + embedding</div>
+              <div class="step-desc">
+                The paper is split into semantic chunks and embedded into a
+                vector store using ChromaDB — indexed and ready in seconds.
+              </div>
+            </div>
+          </div>
+
+          <div class="step-item" data-aos="fade-right" data-aos-delay="200">
+            <div class="step-num">03</div>
+            <div class="step-content">
+              <div class="step-title">Ask anything</div>
+              <div class="step-desc">
+                Type your question in plain English. Your query is embedded,
+                matched against the index, and the most relevant passages retrieved.
+              </div>
+            </div>
+          </div>
+
+          <div class="step-item" data-aos="fade-right" data-aos-delay="300">
+            <div class="step-num">04</div>
+            <div class="step-content">
+              <div class="step-title">Get cited, grounded answers</div>
+              <div class="step-desc">
+                Gemini-2.5 Flash synthesises the retrieved passages into a clear answer —
+                every claim linked back to its exact section in the paper.
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Pipeline card -->
+        <div class="pipeline-card" data-aos="fade-left" data-aos-delay="100">
+          <div class="pipeline-card-header">
+            <span class="status-tag">
+              <span class="dot"></span>
+              Pipeline
+            </span>
+            <span class="pipeline-card-title">RAG Engine</span>
+            <span class="pipeline-live">live</span>
+          </div>
+
+          <div class="pipeline-code">
+            <div class="code-step">
+              <span class="code-arrow">→</span>
+              <span class="code-fn">pdf_extract(</span>
+              <span style="color:var(--lime)">"paper.pdf"</span>
+              <span class="code-fn">)</span>
+              <span class="code-check">✓</span>
+            </div>
+            <div class="code-step">
+              <span class="code-arrow">→</span>
+              <span class="code-fn">chunk_text(</span>
+              <span style="color:var(--lime)">overlap=200</span>
+              <span class="code-fn">)</span>
+              <span class="code-check">✓</span>
+            </div>
+            <div class="code-step">
+              <span class="code-arrow">→</span>
+              <span class="code-fn">embed(</span>
+              <span style="color:var(--lime)">"text-ada-002"</span>
+              <span class="code-fn">)</span>
+              <span class="code-check">✓</span>
+            </div>
+            <div class="code-step">
+              <span class="code-arrow">→</span>
+              <span class="code-fn">store(</span>
+              <span style="color:var(--lime)">ChromaDB</span>
+              <span class="code-fn">)</span>
+              <span class="code-check">✓</span>
+            </div>
+            <div class="code-step">
+              <span class="code-arrow">→</span>
+              <span class="code-fn">retrieve(</span>
+              <span style="color:var(--lime)">top_k=5</span>
+              <span class="code-fn">)</span>
+              <span class="code-check">✓</span>
+            </div>
+            <div class="code-step">
+              <span class="code-arrow">→</span>
+              <span class="code-fn">generate(</span>
+              <span style="color:var(--lime)">"Gemini-2.5 flash"</span>
+              <span class="code-fn">)</span>
+              <span class="code-check" style="animation: pulse-dot 1.5s infinite">●</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ─────────────────────────────────────
+         TECH STACK
+    ───────────────────────────────────── -->
+    <section class="tech-stack" id="tech">
+
+      <div class="section-label">Tech stack</div>
+      <h2 class="section-title">Built on serious infrastructure</h2>
+      <p class="section-sub">
+        Every layer chosen for reliability, speed, and developer clarity —
+        not hype.
+      </p>
+
+      <div class="tech-rows">
+
+        <div class="tech-row" data-aos="fade-up">
+          <span class="tech-row-label">Frontend</span>
+          <span class="tech-pill">⬡ HTML5</span>
+          <span class="tech-pill">⬡ CSS3</span>
+          <span class="tech-pill">⬡ Vanilla JS</span>
+          <span class="tech-pill">⬡ AOS</span>
+          <span class="tech-pill">⬡ Typed.js</span>
+        </div>
+
+        <div class="tech-row" data-aos="fade-up" data-aos-delay="80">
+          <span class="tech-row-label">Backend</span>
+          <span class="tech-pill">🐍 Python</span>
+          <span class="tech-pill">⚡ FastAPI</span>
+          <span class="tech-pill">🔐 JWT Auth</span>
+          <span class="tech-pill">🔒 bcrypt</span>
+        </div>
+
+        <div class="tech-row" data-aos="fade-up" data-aos-delay="160">
+          <span class="tech-row-label">AI / ML</span>
+          <span class="tech-pill">🧠 Gemini-2.5</span>
+          <span class="tech-pill">📐 Gemini Embeddings</span>
+          <span class="tech-pill">🔗 LangChain</span>
+          <span class="tech-pill">🗄 ChromaDB</span>
+        </div>
+
+        <div class="tech-row" data-aos="fade-up" data-aos-delay="240">
+          <span class="tech-row-label">Storage</span>
+          <span class="tech-pill">🐘 PostgreSQL</span>
+          <span class="tech-pill">📁 Local / S3</span>
+          <span class="tech-pill">🧩 SQLAlchemy</span>
+        </div>
+
+        <div class="tech-row" data-aos="fade-up" data-aos-delay="320">
+          <span class="tech-row-label">DevOps</span>
+          <span class="tech-pill">🐳 Docker</span>
+          <span class="tech-pill">📦 pip / venv</span>
+          <span class="tech-pill">🔄 GitHub Actions</span>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ─────────────────────────────────────
+         ABOUT / DEVELOPER
+    ───────────────────────────────────── -->
+    <section class="about" id="about">
+
+      <div class="about-grid">
+
+        <!-- Left — bio -->
+        <div data-aos="fade-right">
+          <div class="about-label">Built by</div>
+          <div class="about-name">A developer who reads too many papers.</div>
+<div class="about-built-by" style="font-size:13px;color:var(--text-muted);margin-top:6px;letter-spacing:0.05em;">
+  Built by <span style="color:var(--lime);font-weight:600;">Dev Aditya Singh</span>
+</div>
+          <div class="about-role">
+            <span>⚡</span> Full-stack · AI · Research tools
+          </div>
+          <p class="about-desc">
+            ResearchAI started as a personal tool to stop losing track of what I'd
+            read. If you've ever highlighted a paper, closed it, and forgotten
+            everything a week later — this is for you.
+          </p>
+          <p class="about-desc">
+            Built end-to-end with FastAPI, ChromaDB, and Gemini-2.5 flash. Every design
+            decision prioritises clarity and speed over feature bloat.
+          </p>
+          <div class="about-skills">
+            <span class="badge badge-lime">Python</span>
+            <span class="badge badge-lime">FastAPI</span>
+            <span class="badge badge-lime">LangChain</span>
+            <span class="badge">ChromaDB</span>
+            <span class="badge">Gemini-2.5 flash</span>
+            <span class="badge">PostgreSQL</span>
+          </div>
+        </div>
+
+        <!-- Right — stats card -->
+        <div data-aos="fade-left" data-aos-delay="100">
+          <div class="stats-card">
+            <div class="stats-card-title">Project stats</div>
+
+            <div class="stat-row-item">
+              <div class="stat-number">2.4s</div>
+              <div class="stat-desc">Avg. answer<br>generation time</div>
+            </div>
+            <div class="stat-row-item">
+              <div class="stat-number">847</div>
+              <div class="stat-desc">Avg. chunks<br>per paper</div>
+            </div>
+            <div class="stat-row-item">
+              <div class="stat-number">98%</div>
+              <div class="stat-desc">Citation<br>accuracy</div>
+            </div>
+            <div class="stat-row-item">
+              <div class="stat-number">∞</div>
+              <div class="stat-desc">Papers you can<br>upload</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ─────────────────────────────────────
+         FOOTER
+    ───────────────────────────────────── -->
+    <footer class="footer">
+
+      <!-- Watermark -->
+      <div class="footer-watermark">ResearchAI</div>
+
+      <!-- CTA block -->
+      <div class="footer-cta" data-aos="fade-up">
+        <h2 class="footer-cta-heading">
+          Stop skimming.<br>Start understanding.
+        </h2>
+        <p class="footer-cta-sub">
+          Upload your first paper free — no credit card required.
+        </p>
+        <a href="auth.html?mode=register" class="footer-btn">
+          Get started for free →
+        </a>
+      </div>
+
+      <!-- Footer bottom -->
+      <div class="footer-bottom">
+        <div class="footer-left">
+          ResearchAI<br>
+          Built with ♥ and too much coffee<br>
+          © 2026 · All rights reserved
+        </div>
+
+        <div class="footer-center">
+          <a href="#features"   class="footer-link">Features</a>
+          <a href="#how"        class="footer-link">How it works</a>
+          <a href="#tech"       class="footer-link">Tech</a>
+          <a href="#about"      class="footer-link">About</a>
+          <a href="auth.html"   class="footer-link">Sign in</a>
+        </div>
+
+        <div class="footer-right">
+          <span class="status-tag" style="justify-content:flex-end;">
+            <span class="dot"></span>
+            All systems operational
+          </span><br>
+          v1.0.0 · beta
+        </div>
+      </div>
+
+    </footer>
+
+  </div><!-- /shell -->
+
+
+  <!-- ═══════════════════════════════════════
+       SCRIPTS
+  ═══════════════════════════════════════ -->
+
+  <!-- AOS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+
+  <!-- Typed.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.12/typed.min.js"></script>
+
+  <!-- Landing JS -->
+  <script src="assets/js/landing.js"></script>
+
+</body>
+</html>
