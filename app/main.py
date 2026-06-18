@@ -1,5 +1,5 @@
 from fastapi import FastAPI, Request
-from fastapi.responses import JSONResponse
+""" from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 import traceback
@@ -11,7 +11,7 @@ from app.api.summary  import router as summary_router
 from app.api.citation import router as citation_router
 from app.api.search   import router as search_router
 from app.api.auth     import router as auth_router
-from app.api.papers   import router as papers_router
+from app.api.papers   import router as papers_router """
 
 load_dotenv()
 init_db()
