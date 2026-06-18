@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Request
+from dotenv import load_dotenv
 """ from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
-from dotenv import load_dotenv
 import traceback
 
 from app.database.db import init_db
