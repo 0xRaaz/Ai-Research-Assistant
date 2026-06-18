@@ -1,21 +1,47 @@
-from sentence_transformers import SentenceTransformer
+import os
+import google.generativeai as genai
+from dotenv import load_dotenv
 
-# Load the embedding model once (reused across all calls)
-MODEL_NAME = "all-MiniLM-L6-v2"
-model = SentenceTransformer(MODEL_NAME)
+# Load environment variables
+load_dotenv()
+
+# Configure Gemini API
+genai.configure(
+    api_key=os.getenv("GEMINI_API_KEY")
+)
 
 
 def generate_embeddings(chunks: list[str]) -> list[list[float]]:
-    """Convert text chunks into vector embeddings."""
+    """
+    Convert multiple text chunks into vector embeddings using Gemini.
+    """
 
     print(f"Generating embeddings for {len(chunks)} chunks...")
-    embeddings = model.encode(chunks, show_progress_bar=True)
 
-    return embeddings.tolist()  # convert numpy array to plain list
+    embeddings = []
+
+    for chunk in chunks:
+        response = genai.embed_content(
+            model="models/text-embedding-004",
+            content=chunk,
+            task_type="retrieval_document"
+        )
+
+        embeddings.append(response["embedding"])
+
+    return embeddings
+
 
 
 def get_embedding_for_query(query: str) -> list[float]:
-    """Convert a single query string into an embedding vector."""
+    """
+    Convert a user query into an embedding vector.
+    """
 
-    embedding = model.encode([query])
-    return embedding[0].tolist()
+    response = genai.embed_content(
+        model="models/text-embedding-004",
+        content=query,
+        task_type="retrieval_query"
+    )
+
+    return response["embedding"]
