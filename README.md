@@ -193,7 +193,7 @@ http://localhost:5173
 - React.js
 
 # ‍💻 Author
-Divyesh Tiwari
+Dev Aditya Singh
 
 
 
